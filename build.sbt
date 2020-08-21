@@ -627,6 +627,26 @@ lazy val grpc =
       )
     ).dependsOn(httpJVM, rxJVM, airframeMacrosJVMRef, airspecRefJVM % Test)
 
+val AKKA_HTTP_VERSION   = "10.2.0"
+val AKKA_STREAM_VERSION = "2.6.8"
+
+lazy val akka =
+  project
+    .in(file("airframe-http-akka"))
+    .settings(buildSettings)
+    .settings(
+      name := "airframe-http-akka",
+      description := "REST API binding for Akka",
+      // Finagle doesn't support Scala 2.13 yet
+      libraryDependencies ++= Seq(
+        "com.typesafe.akka" %% "akka-http"   % AKKA_HTTP_VERSION,
+        "com.typesafe.akka" %% "akka-stream" % AKKA_STREAM_VERSION,
+        // Redirecting slf4j log in Finagle to airframe-log
+        "org.slf4j" % "slf4j-jdk14" % SLF4J_VERSION
+      )
+    )
+    .dependsOn(httpJVM, airframeMacrosJVMRef, airspecRefJVM % Test)
+
 lazy val finagle =
   project
     .in(file("airframe-http-finagle"))
